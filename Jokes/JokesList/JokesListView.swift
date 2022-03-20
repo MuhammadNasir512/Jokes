@@ -7,6 +7,9 @@ struct JokesListView: View {
         NavigationView {
         }
         .overlay(ProgressView().background(.white).opacity(viewModel.isLoading ? 1 : 0))
+        .alert(isPresented: $viewModel.needsShowingErrorAlert) {
+            Alert(title: Text(viewModel.error?.localizedDescription ?? "Unknown Error"))
+        }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear(perform: loadJokes)
     }

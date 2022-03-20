@@ -3,10 +3,13 @@ import Foundation
 extension JokesListView {
     
     final class ViewModel: ObservableObject {
-        private var apiHandler: APIHandlerType
-        @Published var isLoading = false
+        
         @Published var jokeCellModels = [JokesCellViewModel]()
+        @Published var isLoading = false
+        @Published var needsShowingErrorAlert = false
+        @Published private(set) var error: Error? = nil
 
+        private var apiHandler: APIHandlerType
         init(apiHandler: APIHandlerType) {
             self.apiHandler = apiHandler
         }
@@ -29,13 +32,15 @@ extension JokesListView {
                 let rootObject = try decoder.decode(RootObject.self, from: data)
                 let jokes = rootObject.value
                 jokeCellModels = jokes.map { JokesCellViewModel(jokesModel: $0) }
+                print("Jokes Count: \(jokeCellModels.count)")
             } catch let error as NSError {
                 handleError(error: error)
             }
         }
 
         private func handleError(error: Error) {
-            // Show error
+            self.error = error
+            needsShowingErrorAlert = true
         }
     }
 }
