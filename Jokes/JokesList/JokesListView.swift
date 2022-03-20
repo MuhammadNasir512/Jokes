@@ -1,14 +1,25 @@
 import SwiftUI
 
 struct JokesListView: View {
+    @StateObject var viewModel: ViewModel
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView {
+        }
+        .overlay(ProgressView().background(.white).opacity(viewModel.isLoading ? 1 : 0))
+        .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear(perform: loadJokes)
+    }
+    
+    private func loadJokes() {
+        viewModel.loadJokes()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        JokesListView()
+        let apiHandler = APIHandler()
+        let viewModel = JokesListView.ViewModel(apiHandler: apiHandler)
+        JokesListView(viewModel: viewModel)
     }
 }

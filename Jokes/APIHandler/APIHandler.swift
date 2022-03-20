@@ -19,7 +19,7 @@ final class APIHandler: APIHandlerType {
             return
         }
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 guard let error = error else {
                     let dataToSend = data ?? Data()
                     completionHandler(.success(dataToSend))
