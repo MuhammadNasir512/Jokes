@@ -8,13 +8,16 @@ extension JokesListView {
         @Published var isLoading = false
         @Published var needsShowingErrorAlert = false
         @Published private(set) var error: Error? = nil
+        private var jokesCount = 100
 
         private var apiHandler: APIHandlerType
         init(apiHandler: APIHandlerType) {
             self.apiHandler = apiHandler
+            self.apiHandler.setCustomResultCount(jokesCount)
         }
 
         func loadJokes() {
+            jokeCellModels.removeAll()
             isLoading = true
             apiHandler.getData { [weak self] result in
                 switch result {
@@ -32,7 +35,6 @@ extension JokesListView {
                 let rootObject = try decoder.decode(RootObject.self, from: data)
                 let jokes = rootObject.value
                 jokeCellModels = jokes.map { JokesCellViewModel(jokesModel: $0) }
-                print("Jokes Count: \(jokeCellModels.count)")
             } catch let error as NSError {
                 handleError(error: error)
             }

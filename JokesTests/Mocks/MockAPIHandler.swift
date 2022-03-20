@@ -2,8 +2,7 @@ import XCTest
 @testable import Jokes
 
 final class MockAPIHandler: APIHandlerType {
-    
-    let urlString: String
+    var urlString: String
     var fileNameInBundle = "MockedJokes"
     var exp: XCTestExpectation!
     

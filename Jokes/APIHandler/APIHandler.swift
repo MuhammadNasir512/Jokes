@@ -2,12 +2,13 @@ import Foundation
 
 protocol APIHandlerType: AnyObject {
     func getData(completionHandler: @escaping (Result<Data, Error>) -> Void)
+    var urlString: String { get set }
     init(urlString: String)
 }
 
 final class APIHandler: APIHandlerType {
 
-    let urlString: String
+    var urlString: String
     init(urlString: String = "http://api.icndb.com/jokes/random/12?exclude=[explicit]") {
         self.urlString = urlString
     }
@@ -19,7 +20,7 @@ final class APIHandler: APIHandlerType {
             return
         }
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.async {
                 guard let error = error else {
                     let dataToSend = data ?? Data()
                     completionHandler(.success(dataToSend))
@@ -29,5 +30,13 @@ final class APIHandler: APIHandlerType {
             }
         }
         task.resume()
+    }
+}
+
+extension APIHandlerType {
+    
+    func setCustomResultCount(_ count: Int) {
+        let format = "http://api.icndb.com/jokes/random/%d?exclude=[explicit]"
+        urlString = String(format: format, count)
     }
 }
