@@ -1,12 +1,12 @@
 import SwiftUI
 
-// http://api.icndb.com/jokes/random/12?exclude=[explicit]
-
 @main
 struct JokesApp: App {
     var body: some Scene {
         WindowGroup {
-            JokesListView()
+            let apiHandler = APIHandler()
+            let viewModel = JokesListView.ViewModel(apiHandler: apiHandler)
+            JokesListView(viewModel: viewModel)
         }
     }
 }
