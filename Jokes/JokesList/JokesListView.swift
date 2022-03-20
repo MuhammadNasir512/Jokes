@@ -5,6 +5,19 @@ struct JokesListView: View {
     
     var body: some View {
         NavigationView {
+            List(viewModel.jokeCellModels) { joke in
+                Text(joke.joke).padding(.bottom).padding(.top)
+            }
+            .listStyle(.plain)
+            .navigationTitle("Jokes")
+            .navigationBarItems(trailing: HStack {
+                Button(action: {
+                    loadJokes()
+                }) {
+                    Image(systemName: "arrow.clockwise").font(.title2)
+                }
+                .foregroundColor(.blue)
+            })
         }
         .overlay(ProgressView().background(.white).opacity(viewModel.isLoading ? 1 : 0))
         .alert(isPresented: $viewModel.needsShowingErrorAlert) {

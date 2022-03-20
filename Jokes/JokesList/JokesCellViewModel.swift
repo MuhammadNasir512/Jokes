@@ -1,5 +1,5 @@
 
-struct JokesCellViewModel {
+struct JokesCellViewModel: Identifiable {
     let id: Int
     let joke: String
 }
